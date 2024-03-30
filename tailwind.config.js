@@ -2,7 +2,11 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
-  },
+    extend: {
+      fontFamily: {
+        'ar': ['IBM Plex Sans Arabic', 'sans-serif'],
+      },
+      },
+    },
   plugins: [],
 };
