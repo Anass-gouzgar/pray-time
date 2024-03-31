@@ -10,8 +10,10 @@ import moment from "moment";
 import "moment/dist/locale/ar-ma";
 
 const MainContent = () => {
-
   // states
+  const [nextPrayerIndex, setNextPrayerIndex] = useState(2);
+  const [remainingTime, setRemainingTime] = useState("");
+
   const [timings, setTimings] = useState({});
   const [selectedApiName, setSelectedApiName] = useState();
   const [selectedDisplayName, setSelectedDisplayName] =
@@ -73,7 +75,13 @@ const MainContent = () => {
     { value: "taliouine", key: "تالوين" },
     { value: "sidi_ifni", key: "سيدي إفني" },
   ];
-
+  const prayersArray = [
+    { key: "Fajr", displayName: "الفجر" },
+    { key: "Dhuhr", displayName: "الظهر" },
+    { key: "Asr", displayName: "العصر" },
+    { key: "Sunset", displayName: "المغرب" },
+    { key: "Isha", displayName: "العشاء" },
+  ];
   // fetch data
   const getTimings = async () => {
     const response = await axios.get(
@@ -84,11 +92,77 @@ const MainContent = () => {
 
   useEffect(() => {
     getTimings();
-
     const t = moment();
-
     setToday(t.format("MMM Do YYYY | h:mm "));
   }, [selectedApiName]);
+
+  useEffect(() => {
+    let interval = setInterval(() => {
+      setupCountdownTimer();
+    }, 1000);
+
+    const t = moment();
+    setToday(t.format("MMM Do YYYY | h:mm"));
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [timings]);
+
+  const setupCountdownTimer = () => {
+    const momentNow = moment();
+
+    let prayerIndex = 2;
+
+    if (
+      momentNow.isAfter(moment(timings["Fajr"], "hh:mm")) &&
+      momentNow.isBefore(moment(timings["Dhuhr"], "hh:mm"))
+    ) {
+      prayerIndex = 1;
+    } else if (
+      momentNow.isAfter(moment(timings["Dhuhr"], "hh:mm")) &&
+      momentNow.isBefore(moment(timings["Asr"], "hh:mm"))
+    ) {
+      prayerIndex = 2;
+    } else if (
+      momentNow.isAfter(moment(timings["Asr"], "hh:mm")) &&
+      momentNow.isBefore(moment(timings["Sunset"], "hh:mm"))
+    ) {
+      prayerIndex = 3;
+    } else if (
+      momentNow.isAfter(moment(timings["Sunset"], "hh:mm")) &&
+      momentNow.isBefore(moment(timings["Isha"], "hh:mm"))
+    ) {
+      prayerIndex = 4;
+    } else {
+      prayerIndex = 0;
+    }
+
+    setNextPrayerIndex(prayerIndex);
+
+    const nextPrayerObject = prayersArray[prayerIndex];
+    const nextPrayerTime = timings[nextPrayerObject.key];
+    const nextPrayerTimeMoment = moment(nextPrayerTime, "hh:mm");
+
+    let remainingTime = moment(nextPrayerTime, "hh:mm").diff(momentNow);
+
+    if (remainingTime < 0) {
+      const midnightDiff = moment("23:59:59", "hh:mm:ss").diff(momentNow);
+      const fajrToMidnightDiff = nextPrayerTimeMoment.diff(
+        moment("00:00:00", "hh:mm:ss")
+      );
+
+      const totalDiffernce = midnightDiff + fajrToMidnightDiff;
+
+      remainingTime = totalDiffernce;
+    }
+
+    const durationRemainingTime = moment.duration(remainingTime);
+
+    setRemainingTime(
+      `${durationRemainingTime.seconds()} : ${durationRemainingTime.minutes()} : ${durationRemainingTime.hours()}`
+    );
+  };
 
   return (
     <div className="flex flex-col w-full mt-6 font-ar">
@@ -96,12 +170,12 @@ const MainContent = () => {
       <div className="flex justify-around bg-slate-100 w-full">
         <div>
           <h2> {today}</h2>
-          <h1>{selectedDisplayName}</h1>
+          <h1 className="text-3xl font-bold">{selectedDisplayName}</h1>
         </div>
 
         <div>
-          <h2>الوقت المتبقي لأذان المَغرب</h2>
-          <h1>1:23:34</h1>
+          <h2>متبقي حتى صلاة {prayersArray[nextPrayerIndex].displayName}</h2>
+          <h1 className="text-3xl font-bold">{remainingTime}</h1>
         </div>
       </div>
       {/* divider */}
