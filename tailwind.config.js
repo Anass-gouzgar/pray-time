@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        'ar': ['IBM Plex Sans Arabic', 'sans-serif'],
+        'ar': ['ar', 'sans-serif'],
       },
       },
     },
