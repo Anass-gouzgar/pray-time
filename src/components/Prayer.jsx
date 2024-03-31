@@ -12,7 +12,7 @@ const Prayer = ({salat, time, img}) => {
       </div>
 
       <div className="p-2">
-        <h5 className="mb-3 text-2xl font-bold tracking-tight text-white">
+        <h5 className="mb-3 text-3xl font-bold tracking-tight text-white">
           {salat}
         </h5>
         <p className=" text-5xl text-center text-white font-bold ">{time}</p>

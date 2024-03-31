@@ -1,14 +1,17 @@
-import MainContent from './components/MainContent';
+import React from "react";
+import MainContent from "./components/MainContent";
 
 function App() {
-
   return (
-    <div dir='rtl' className="flex justify-center items-center md:h-[100vh] bg-slate-900 ">
-      <div className="flex items-center w-[100vw] h-1/2 ">
-          <MainContent />
+    <div
+      dir="rtl"
+      className="flex flex-col justify-center items-center min-h-screen bg-slate-900"
+    >
+      <div className="flex flex-col items-center w-full h-1/2 rounded-md pb-4 ">
+        <MainContent />
       </div>
     </div>
   );
 }
 
-export default App
+export default App;
