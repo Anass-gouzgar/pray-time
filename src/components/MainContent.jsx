@@ -178,7 +178,7 @@ const MainContent = () => {
 
           <div className="p-5">
             <h2 className="text-2xl">متبقي حتى صلاة <span className="text-cyan-500 text-3xl">{prayersArray[nextPrayerIndex].displayName}</span> </h2>
-            <h1 className="text-4xl font-bold">{remainingTime}</h1>
+            <h1 className="text-3xl md:text-4xl font-bold">{remainingTime}</h1>
           </div>
         </div>
 
