@@ -172,67 +172,65 @@ const MainContent = () => {
   };
 return (
   <>
-    {isLoading ? ( 
-      <div>جاري التحميل...</div>
-    ) : (
-      <div className="flex flex-col w-full mt-6 font-ar">
-        {/* first row */}
-        <div className="flex justify-around order-1 bg-slate-100 w-full">
-          <div className="p-5">
-            <h2 className="text-2xl"> {today}</h2>
-            <h1 className="text-4xl font-bold">{selectedDisplayName}</h1>
-          </div>
-
-          <div className="p-5">
-            <h2 className="text-2xl">
-              متبقي حتى صلاة{" "}
-              <span className="text-cyan-500 text-3xl">
-                {prayersArray[nextPrayerIndex].displayName}
-              </span>{" "}
-            </h2>
-            <h1 className="text-3xl md:text-4xl font-bold">{remainingTime}</h1>
-          </div>
+    <div className="flex flex-col w-full mt-6 font-ar">
+      {/* first row */}
+      <div className="flex justify-around order-1 bg-slate-100 w-full">
+        <div className="p-5">
+          <h2 className="text-2xl"> {today}</h2>
+          <h1 className="text-4xl font-bold">{selectedDisplayName}</h1>
         </div>
 
-        {/* divider */}
-        <div className="border border-b-4 order-2 border-blue-700 m-4" />
-
-        {/* prayers cards */}
-        <div className="bg-bklack flex order-3 gap-4 justify-center flex-wrap mb-9 ">
-          <Prayer salat="الفجر" time={timings.Fajr} img={fajr} />
-          <Prayer salat="الظهر" time={timings.Dhuhr} img={dhuhr} />
-          <Prayer salat="العصر" time={timings.Asr} img={asr} />
-          <Prayer salat="المغرب" time={timings.Sunset} img={maghrib} />
-          <Prayer salat="العشاء" time={timings.Isha} img={isha} />
+        <div className="p-5">
+          <h2 className="text-2xl">
+            متبقي حتى صلاة{" "}
+            <span className="text-cyan-500 text-3xl">
+              {prayersArray[nextPrayerIndex].displayName}
+            </span>{" "}
+          </h2>
+          <h1 className="text-3xl md:text-4xl font-bold">
+            {isLoading ? "جاري التحميل..." : remainingTime}
+          </h1>{" "}
         </div>
-
-        {/* select city */}
-
-        <form className="max-w-sm mx-auto sm:order-4 order-1  ">
-          <select
-            onChange={(e) => {
-              const selectedIndex = e.target.selectedIndex;
-              const selectedOption = e.target.options[selectedIndex];
-              const selectedKey = selectedOption.getAttribute("data-key");
-              setSelectedApiName(e.target.value);
-              setSelectedDisplayName(selectedKey);
-            }}
-            id="countries"
-            className="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
-          >
-            <option value="" disabled>
-              المدينة
-            </option>
-            {/* Mapping through the array of options */}
-            {cities.map((city) => (
-              <option key={city.value} value={city.value} data-key={city.key}>
-                {city.key}
-              </option>
-            ))}
-          </select>
-        </form>
       </div>
-    )}
+
+      {/* divider */}
+      <div className="border border-b-4 order-2 border-blue-700 m-4" />
+
+      {/* prayers cards */}
+      <div className="bg-bklack flex order-3 gap-4 justify-center flex-wrap mb-9 ">
+        <Prayer salat="الفجر" time={timings.Fajr} img={fajr} />
+        <Prayer salat="الظهر" time={timings.Dhuhr} img={dhuhr} />
+        <Prayer salat="العصر" time={timings.Asr} img={asr} />
+        <Prayer salat="المغرب" time={timings.Sunset} img={maghrib} />
+        <Prayer salat="العشاء" time={timings.Isha} img={isha} />
+      </div>
+
+      {/* select city */}
+
+      <form className="max-w-sm mx-auto sm:order-4 order-1  ">
+        <select
+          onChange={(e) => {
+            const selectedIndex = e.target.selectedIndex;
+            const selectedOption = e.target.options[selectedIndex];
+            const selectedKey = selectedOption.getAttribute("data-key");
+            setSelectedApiName(e.target.value);
+            setSelectedDisplayName(selectedKey);
+          }}
+          id="countries"
+          className="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+        >
+          <option value="" disabled>
+            المدينة
+          </option>
+          {/* Mapping through the array of options */}
+          {cities.map((city) => (
+            <option key={city.value} value={city.value} data-key={city.key}>
+              {city.key}
+            </option>
+          ))}
+        </select>
+      </form>
+    </div>
   </>
 );
 
