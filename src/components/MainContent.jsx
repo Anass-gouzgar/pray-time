@@ -171,13 +171,13 @@ const MainContent = () => {
       <div className="flex flex-col w-full mt-6 font-ar">
         {/* first row */}
         <div className="flex justify-around order-1 bg-slate-100 w-full">
-          <div>
+          <div className="p-5">
             <h2 className="text-2xl"> {today}</h2>
             <h1 className="text-4xl font-bold">{selectedDisplayName}</h1>
           </div>
 
-          <div>
-            <h2 className="text-2xl">متبقي حتى صلاة {prayersArray[nextPrayerIndex].displayName}</h2>
+          <div className="p-5">
+            <h2 className="text-2xl">متبقي حتى صلاة <span className="text-cyan-500 text-3xl">{prayersArray[nextPrayerIndex].displayName}</span> </h2>
             <h1 className="text-4xl font-bold">{remainingTime}</h1>
           </div>
         </div>
