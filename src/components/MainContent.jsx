@@ -13,12 +13,12 @@ const MainContent = () => {
   // states
   const [nextPrayerIndex, setNextPrayerIndex] = useState(2);
   const [remainingTime, setRemainingTime] = useState("");
-
   const [timings, setTimings] = useState({});
   const [selectedApiName, setSelectedApiName] = useState();
   const [selectedDisplayName, setSelectedDisplayName] =
     useState("الدار البيضاء");
   const [today, setToday] = useState(moment().format("MMM Do YYYY | h:mm "));
+  const [isLoading, setIsLoading] = useState(true); // New state for loading
 
   // Array of options
   const cities = [
@@ -84,10 +84,17 @@ const MainContent = () => {
   ];
   // fetch data
   const getTimings = async () => {
-    const response = await axios.get(
-      `https://api.aladhan.com/v1/timingsByCity?country=MA&city=${selectedApiName}`
-    );
-    setTimings(response.data.data.timings);
+    setIsLoading(true); // Set loading to true before fetching
+    try {
+      const response = await axios.get(
+        `https://api.aladhan.com/v1/timingsByCity?country=MA&city=${selectedApiName}`
+      );
+      setTimings(response.data.data.timings);
+      setIsLoading(false); // Set loading to false after fetching
+    } catch (error) {
+      console.error("Failed to fetch timings:", error);
+      setIsLoading(false); // Ensure loading is set to false even if fetch fails
+    }
   };
 
   useEffect(() => {
@@ -163,11 +170,11 @@ const MainContent = () => {
       `${durationRemainingTime.seconds()} : ${durationRemainingTime.minutes()} : ${durationRemainingTime.hours()}`
     );
   };
-
-  return (
-    <>
-
-
+return (
+  <>
+    {isLoading ? ( 
+      <div>جاري التحميل...</div>
+    ) : (
       <div className="flex flex-col w-full mt-6 font-ar">
         {/* first row */}
         <div className="flex justify-around order-1 bg-slate-100 w-full">
@@ -177,7 +184,12 @@ const MainContent = () => {
           </div>
 
           <div className="p-5">
-            <h2 className="text-2xl">متبقي حتى صلاة <span className="text-cyan-500 text-3xl">{prayersArray[nextPrayerIndex].displayName}</span> </h2>
+            <h2 className="text-2xl">
+              متبقي حتى صلاة{" "}
+              <span className="text-cyan-500 text-3xl">
+                {prayersArray[nextPrayerIndex].displayName}
+              </span>{" "}
+            </h2>
             <h1 className="text-3xl md:text-4xl font-bold">{remainingTime}</h1>
           </div>
         </div>
@@ -220,8 +232,10 @@ const MainContent = () => {
           </select>
         </form>
       </div>
-    </>
-  );
+    )}
+  </>
+);
+
 };
 
 export default MainContent;
